@@ -34,7 +34,6 @@ def get_converters():
     converters = {}
     for index, answer in enumerate(answer_key):
         def check_score(value, a=answer):
-            print(a)
             if value == a:
                 return 4
             elif value == "":
@@ -71,6 +70,6 @@ def read_file_pandas():
     filename_export = "{}_grades.txt".format(filename.split('.')[0])
     #Export kết quả ra file
     df.Total.to_csv("./Data Files/Expected Output/{}".format(filename_export), header=False)
-    print(df.Total)
+    print('File export successful')
 
 read_file_pandas()
