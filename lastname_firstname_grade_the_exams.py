@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 
+#Danh sách các đáp án đúng
 answer_key = "B,A,D,D,C,B,D,A,C,C,D,B,A,B,A,C,B,D,A,C,A,A,B,D,D".split(',')
 
 #đọc file và tìm các dòng lỗi
@@ -47,10 +48,10 @@ def get_converters():
 def read_file_pandas():
     filename = input("Enter a class to grade (i.e. class1 for class1.txt): ")
     list_line_error = read_file(filename)
-    # read file lọc ra các dòng lỗi
+    # read file lọc ra các dòng lỗi với "skiprows" được trả lại từ hàm "read_file()"
+    #converters chuyển các đáp án thành điểm
     df = pd.read_csv("./Data Files/{}".format(filename), header=None,
                      engine='python', usecols=range(26), skiprows=list_line_error, converters=get_converters())
-    print("Successfully opened {}".format(filename))
     # đặt cột id làm index
     df.set_index(0, inplace=True)
     #Thêm cột total bằng tổng tất cả các điểm cuả một dòng
@@ -58,6 +59,7 @@ def read_file_pandas():
     #Nếu không có dòng lỗi thi in ra thông báo
     if len(list_line_error) == 0:
         print("No errors found!")
+    #Tính toán các kết quả từ cột Total
     print("**** REPORT ****")
     print("Total valid lines of data: {}".format(df.shape[0]))
     print("Total invalid lines of data: {}".format(len(list_line_error)))
@@ -66,7 +68,7 @@ def read_file_pandas():
     print("Lowest score: {}".format(df.Total.min()))
     print("Range of scores: {}".format(df.Total.max() - df.Total.min()))
     print("Median score: {}".format(df.Total.median()))
-    #Tạo tên file mới
+    #Tạo tên file export
     filename_export = "{}_grades.txt".format(filename.split('.')[0])
     #Export kết quả ra file
     df.Total.to_csv("./Data Files/Expected Output/{}".format(filename_export), header=False)
